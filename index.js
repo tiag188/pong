@@ -2,6 +2,9 @@ let xBoll = 400;
 let yBoll = 200;
 let diameter = 22;
 let bgSize = 800;
+let bollSpeed = 4;
+
+
 
 let bg  = {
   w: 800,
@@ -16,8 +19,31 @@ let boll = {
     raio: diameter / 2,
   },
   speed: {
-    y: 6,
-    x: 6,
+    y: bollSpeed,
+    x: bollSpeed,
+  }
+}
+
+let racket = {
+  player: {
+    position: {
+        x: 5,
+        y: 150
+    },
+    size: {
+        w: 10,
+        h: 90
+    }
+  },
+  cpu: {
+    position: {
+        x: 785,
+        y: 150
+    },
+    size: {
+        w: 10,
+        h: 90
+    }
   }
 }
 
@@ -33,12 +59,20 @@ function setup() {
   createCanvas(bg.w, bg.h);
 }
 
+function showRackets() {
+    rect(racket.player.position.x, racket.player.position.y, racket.player.size.w, racket.player.size.h);
+    rect(racket.cpu.position.x, racket.cpu.position.y, racket.cpu.size.w, racket.cpu.size.h);
+}
+
 function draw() {
   background(0);
   showBoll();
   bollMoveX();
   bollMoveY();
   checkcollisionBoardBoll();
+  showRackets();
+  moveRacketPlayer();
+  checkCollisionRacketInBoll()
 }
 
 function showBoll() {
@@ -55,4 +89,28 @@ function checkcollisionBoardBoll(){
   }
 }
 
+function moveRacketPlayer() {
+    if (keyIsDown(UP_ARROW)) {
+        racket.player.position.y -= 10;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+        racket.player.position.y += 10;
+    }
+}
 
+function moveRacketCPU() {
+    if (keyIsDown(UP_ARROW)) {
+        racket.player.position.y -= 10;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+        racket.player.position.y += 10;
+    }
+}
+
+function checkCollisionRacketInBoll() {
+    if (boll.position.x - boll.position.raio < racket.player.position.x + racket.player.size.w
+       && boll.position.y - boll.position.raio < racket.player.position.y + racket.player.size.h
+       && boll.position.y + boll.position.raio > racket.player.position.y) {
+        boll.speed.x *= -1;
+    }
+}
